@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gallery.hwang.sumin.mapper.MemberMapper">
+    <!--select * 하는이유 : session에 email과 password정보만 담는게아니라 전체정보를 담기위해서 (홈에서 다른회원정보도 뽑아올수있게)-->
+    <select id="getUserAccount" resultType="com.gallery.hwang.sumin.domain.MemberVO">
+        SELECT *
+        FROM member
+        WHERE memberID = #{memberID}
+    </select>
+
+    <insert id="insertMember">
+        INSERT INTO member
+        (memberID, name, email, password)
+        VALUES
+        (#{memberID}, #{name}, #{email}, #{password});
+    </insert>
+</mapper>

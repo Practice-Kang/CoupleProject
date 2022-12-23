@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 로그파일 경로등 상수들 key and value  -->
+    <property name="LOG_DIR" value="logs" />
+    <property name="LOG_FILE" value="kmc" />
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{35}: %m%n" />
+
+    <!-- CONSOLE appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--  FILE appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!--timebased -->
+            <!--패턴에 명시된 dateTime 최소 단위로 rollover단위가 설정됨 -->
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM, aux}/${LOG_FILE}_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>365</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <!--로그를 바이트배열로 변환하고 해당 배열을 OutputStream에 쓰는작업 담당
+         즉 Appender에 포함되어 사용자가 지정한 형식으로 로그메시지를 변환하는 역할-->
+        <encoder>
+            <!--날짜형식 / 로깅레벨 / 로깅이 발생한 프로그램파일명/메소드이름/라인수/로그메시지/줄바꿈 -->
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info"> <!-- 로그레벨 debug이상 출력 -->
+        <appender-ref ref="CONSOLE"/> <!-- Console에 로그를 출력하고자 할 때 사용 -->
+        <appender-ref ref="FILE"/> <!-- File로 로그를 남기고자 할 때 사용 -->
+    </root>
+
+</configuration>
+
+<!--
+%d  => 로그 기록시간
+%thread => 현재 Thread 이름
+%-5level => 로그 레벨, -5는 출력의 고정폭 (5글자)
+%logger{35} => 축약된 logger name, 35는 최대 자릿수
+%msg => 로그메시지
+%n => 줄바꿈
+-->
